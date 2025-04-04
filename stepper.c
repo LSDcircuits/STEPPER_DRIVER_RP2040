@@ -106,6 +106,9 @@ int main() {
     gpio_init(B22);
     gpio_set_dir(B22, GPIO_OUT);
 
+
+//loop bellow may cause issues when working parallel and relative distances might be 
+// lost from each other since they are two functios at a time
     while(1){
         int motor1InputA = gpio_get(IN1);
         int motor1InputB = gpio_get(IN2);
