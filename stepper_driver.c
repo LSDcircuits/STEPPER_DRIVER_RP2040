@@ -56,3 +56,55 @@ void stepperR2(){
         case 3: setStep2(1, 1, 0, 0); break;
     }
 }
+
+void run_stepper() {
+    // GPIO initialization and direction setting
+    gpio_init(IN1);
+    gpio_set_dir(IN1, GPIO_IN);
+    gpio_init(IN2);
+    gpio_set_dir(IN2, GPIO_IN);
+    gpio_init(A1);
+    gpio_set_dir(A1, GPIO_OUT);
+    gpio_init(B1);
+    gpio_set_dir(B1, GPIO_OUT);
+    gpio_init(A2);
+    gpio_set_dir(A2, GPIO_OUT);
+    gpio_init(B2);
+    gpio_set_dir(B2, GPIO_OUT);
+
+    // Repeat for motor 2
+    gpio_init(IN11);
+    gpio_set_dir(IN11, GPIO_IN);
+    gpio_init(IN22);
+    gpio_set_dir(IN22, GPIO_IN);
+    gpio_init(A11);
+    gpio_set_dir(A11, GPIO_OUT);
+    gpio_init(B11);
+    gpio_set_dir(B11, GPIO_OUT);
+    gpio_init(A22);
+    gpio_set_dir(A22, GPIO_OUT);
+    gpio_init(B22);
+    gpio_set_dir(B22, GPIO_OUT);
+
+
+// loop bellow may cause issues when working parallel and relative distances might be 
+// lost from each other since they are two functios at a time
+// will make a seperate lib for using PIO or keeping single controller per motor
+    while(1){
+        int motor1InputA = gpio_get(IN1);
+        int motor1InputB = gpio_get(IN2);
+        int motor2InputA = gpio_get(IN11);
+        int motor2InputB = gpio_get(IN22);
+        if (motor1InputA == 1 && motor1InputB == 1) {
+            stepperR();
+        } else if (motor1InputA == 0 && motor1InputB == 1) {
+        stepperL(); 
+        }
+        if (motor2InputA == 1 && motor2InputB == 1) {
+        stepperR2();
+        } else if (motor2InputA == 0 && motor2InputB == 1) {
+        stepperL2();
+        }
+    sleep_us(time_s);
+    }
+}
